@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Date, Float, ForeignKey, CheckConstraint
+from sqlalchemy import Column, Integer, String, Date, Float, ForeignKey, CheckConstraint, UniqueConstraint
 from sqlalchemy.orm import relationship
 
 from .database import Base
@@ -21,6 +21,7 @@ class Book(Base):
 
 class Rating(Base):
     __tablename__ = "ratings"
+    __table_args__ = (UniqueConstraint('book_id', 'user_name'),)
 
     id = Column(Integer, primary_key=True)
     book_id = Column(Integer, ForeignKey("books.id", ondelete="CASCADE"), nullable=False)
