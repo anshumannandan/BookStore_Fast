@@ -5,6 +5,9 @@ from .database import Base
 
 
 class Book(Base):
+    '''
+    Book model to store book information
+    '''
     __tablename__ = "books"
 
     id = Column(Integer, primary_key=True)
@@ -20,6 +23,9 @@ class Book(Base):
 
 
 class Rating(Base):
+    '''
+    Rating model to store user ratings and reviews for books
+    '''
     __tablename__ = "ratings"
     __table_args__ = (UniqueConstraint('book_id', 'user_name'),)
 
