@@ -31,7 +31,7 @@ def create_book(book: schemas.BookCreate, db: Session = Depends(get_db)):
     return crud.create_book(db=db, book=book)
 
 
-@app.get("/books/{book_id}", response_model=schemas.Book)
+@app.get("/books/{book_id:int}", response_model=schemas.Book)
 def read_book(book_id: int, db: Session = Depends(get_db)):
 
     book = crud.get_book(db=db, book_id=book_id)
@@ -41,7 +41,7 @@ def read_book(book_id: int, db: Session = Depends(get_db)):
     return book
 
 
-@app.put("/books/{book_id}", response_model=schemas.Book)
+@app.put("/books/{book_id:int}", response_model=schemas.Book)
 def update_book(book_id: int, book: schemas.BookCreate, db: Session = Depends(get_db)):
 
     if crud.get_book_by_isbn(db=db, isbn=book.isbn, book_id=book_id) is not None:
@@ -54,7 +54,7 @@ def update_book(book_id: int, book: schemas.BookCreate, db: Session = Depends(ge
     return book
 
 
-@app.delete("/books/{book_id}", response_model=schemas.Book)
+@app.delete("/books/{book_id:int}", response_model=schemas.Book)
 def delete_book(book_id: int, db: Session = Depends(get_db)):
 
     book = crud.delete_book(db=db, book_id=book_id)
@@ -71,6 +71,13 @@ def read_books(db: Session = Depends(get_db)):
     return books
 
 
+@app.get("/books/rated", response_model=list[schemas.Book])
+def read_books_with_ratings(db: Session = Depends(get_db)):
+        
+        books = crud.get_books_by_ordered_average_rating(db)
+        return books
+
+
 @app.post("/ratings", response_model=schemas.Rating)
 def create_rating_for_book(rating: schemas.RatingCreate, db: Session = Depends(get_db)):
 
@@ -83,7 +90,7 @@ def create_rating_for_book(rating: schemas.RatingCreate, db: Session = Depends(g
     return crud.create_rating(db=db, rating=rating)
 
 
-@app.get("/ratings/{book_id}", response_model=list[schemas.Rating])
+@app.get("/ratings/{book_id:int}", response_model=list[schemas.Rating])
 def read_ratings_for_book(book_id: int, db: Session = Depends(get_db)):
         
         if crud.get_book(db=db, book_id=book_id) is None:

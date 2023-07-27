@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from sqlalchemy.sql import func
 
 from . import models, schemas
 
@@ -41,6 +42,11 @@ def delete_book(db: Session, book_id: int):
 
 def get_books(db: Session):
     return db.query(models.Book).all()
+
+
+def get_books_by_ordered_average_rating(db: Session):
+    return db.query(models.Book).join(models.Rating, isouter=True).group_by(models.Book.id)\
+        .order_by(func.coalesce(func.avg(models.Rating.rating), 0).desc()).all()
 
 
 def create_rating(db: Session, rating: schemas.RatingCreate):
