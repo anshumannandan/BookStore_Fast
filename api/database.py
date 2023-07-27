@@ -4,12 +4,7 @@ from sqlalchemy.orm import sessionmaker
 
 import os
 
-postgres_username = os.environ.get('POSTGRES_USERNAME', 'user')
-postgres_password = os.environ.get('POSTGRES_PASSWORD', 'password')
-postgres_server = os.environ.get('POSTGRES_SERVER', 'localhost')
-postgres_db = os.environ.get('POSTGRES_DB', 'db')
-
-SQLALCHEMY_DATABASE_URL = f"postgresql://{postgres_username}:{postgres_password}@{postgres_server}/{postgres_db}"
+SQLALCHEMY_DATABASE_URL = os.environ.get('DB_URL', 'sqlite:///./sql_app.db')
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL
